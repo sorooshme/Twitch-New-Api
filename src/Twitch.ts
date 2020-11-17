@@ -1,10 +1,14 @@
 import {
   BasicHeaders,
+  TwitchAuthorizationHeaders,
   TwitchAuthRequestPayload,
   TwitchAuthResponsePayload,
   TwitchClient,
+  TwitchResourceResponsePayload,
+  TwitchStreamResponsePayload,
 } from './types';
 import fetch from 'node-fetch';
+import { stringify } from 'querystring';
 
 export class TwitchApi {
   public client: TwitchClient;
@@ -28,6 +32,18 @@ export class TwitchApi {
    */
   private getBasicHeaders(): BasicHeaders {
     return { 'Content-Type': 'application/json' };
+  }
+
+  /**
+   * Returns Twitch Authorization Headers for fetching.
+   *
+   * @param token Token to request with.
+   */
+  private getAuthorizationHeaders(token: string): TwitchAuthorizationHeaders {
+    return {
+      'Client-ID': this.client.id,
+      Authorization: token,
+    };
   }
 
   /***
@@ -81,5 +97,75 @@ export class TwitchApi {
     };
 
     return getTokenFromTwitch(retryCount);
+  }
+
+  /**
+   * Returns an array of live streams by id. (Wont return anything for offline streams.)
+   *
+   * @param ids an array of ids. (Example: 123321123)
+   */
+  public getStreamById(ids: string[]): Promise<TwitchStreamResponsePayload[]> {
+    return this.getStream(ids, true);
+  }
+
+  /**
+   * Returns an array of live streams by name. (Wont return anything for offline streams.)
+   *
+   * @param names an array of names. (Example: mechiller)
+   */
+  public getStreamByName(
+    names: string[]
+  ): Promise<TwitchStreamResponsePayload[]> {
+    return this.getStream(names, false);
+  }
+
+  /**
+   * Returns an array of all live streams.
+   *
+   * @param entries entries to get stream for.
+   * @param isById search by Id?
+   */
+  private async getStream(
+    entries: string[],
+    isById: boolean
+  ): Promise<TwitchStreamResponsePayload[]> {
+    const token = await this.getToken();
+
+    const entriesInHundred = [];
+    const allEntries = Math.ceil(entries.length / 100);
+    for (let i = 0; i < allEntries; i += 1) {
+      entriesInHundred.push(entries.splice(0, 100));
+    }
+
+    const promises = entriesInHundred.map((currentEntry) => {
+      const query = isById
+        ? {
+            user_id: currentEntry,
+          }
+        : {
+            user_login: currentEntry,
+          };
+
+      return fetch('https://api.twitch.tv/helix/streams?' + query, {
+        method: 'GET',
+        headers: {
+          ...this.getBasicHeaders(),
+          ...this.getAuthorizationHeaders(token),
+        },
+      });
+    });
+
+    const responses = await Promise.all(promises);
+    const resources: TwitchResourceResponsePayload[] = await Promise.all(
+      responses.map((res) => res.json())
+    );
+
+    const streams = resources.filter((s) => s.data.length);
+    const result: TwitchStreamResponsePayload[] = [];
+    for (const stream of streams) {
+      result.push(...stream.data);
+    }
+
+    return result;
   }
 }

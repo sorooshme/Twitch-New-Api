@@ -31,3 +31,35 @@ export interface TwitchAuthResponsePayload {
   token_type: string;
   scope?: string[];
 }
+
+/**
+ * Twitch Authorization Headers for fetching.
+ */
+export interface TwitchAuthorizationHeaders {
+  Authorization: string;
+  'Client-ID': string;
+}
+
+/**
+ * Response payload for getting any resource from Twitch.
+ */
+export interface TwitchResourceResponsePayload {
+  data: any[];
+}
+
+/**
+ * Response payload for getting stream from Twitch.
+ */
+export interface TwitchStreamResponsePayload {
+  id: string;
+  user_id: string;
+  user_name: string;
+  game_id: string;
+  game_name: string;
+  type: string;
+  title: string;
+  viewer_count: number;
+  started_at: string;
+  language: string;
+  thumbnail_url: string;
+}
