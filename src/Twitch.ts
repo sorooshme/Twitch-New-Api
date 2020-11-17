@@ -149,7 +149,7 @@ export class TwitchApi {
             user_login: currentEntry,
           };
 
-      return fetch(this.endpoints.streams + '?' + query, {
+      return fetch(this.endpoints.streams + '?' + stringify(query), {
         method: 'GET',
         headers: {
           ...this.getBasicHeaders(),
@@ -159,6 +159,10 @@ export class TwitchApi {
     });
 
     const responses = await Promise.all(promises);
+    if (!responses.every((res) => res.ok)) {
+      throw new Error('Response not ok when fetching from Twitch.');
+    }
+
     const resources: TwitchResourceResponsePayload[] = await Promise.all(
       responses.map((res) => res.json())
     );
@@ -217,7 +221,7 @@ export class TwitchApi {
             login: currentEntry,
           };
 
-      return fetch(this.endpoints.users + '?' + query, {
+      return fetch(this.endpoints.users + '?' + stringify(query), {
         method: 'GET',
         headers: {
           ...this.getBasicHeaders(),
@@ -227,6 +231,10 @@ export class TwitchApi {
     });
 
     const responses = await Promise.all(promises);
+    if (!responses.every((res) => res.ok)) {
+      throw new Error('Response not ok when fetching from Twitch.');
+    }
+
     const resources: TwitchResourceResponsePayload[] = await Promise.all(
       responses.map((res) => res.json())
     );
