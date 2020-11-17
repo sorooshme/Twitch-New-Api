@@ -3,7 +3,7 @@ import {
   TwitchAuthorizationHeaders,
   TwitchAuthRequestPayload,
   TwitchAuthResponsePayload,
-  TwitchClient,
+  TwitchCredentials,
   TwitchResourceResponsePayload,
   TwitchStreamResponsePayload,
   TwitchUserResponsePayload,
@@ -12,7 +12,7 @@ import fetch from 'node-fetch';
 import { stringify } from 'querystring';
 
 export class TwitchApi {
-  public client: TwitchClient;
+  public client: TwitchCredentials;
   private token?: string;
   private expiresAt?: Date;
   private endpoints = {
@@ -26,7 +26,7 @@ export class TwitchApi {
    *
    * @param client Client Credentials
    */
-  constructor(client: TwitchClient) {
+  constructor(client: TwitchCredentials) {
     this.client = client;
   }
 

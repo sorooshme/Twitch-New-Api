@@ -1,7 +1,7 @@
 /**
  * Twitch Client Credentials.
  */
-export interface TwitchClient {
+export interface TwitchCredentials {
   secret: string;
   id: string;
 }

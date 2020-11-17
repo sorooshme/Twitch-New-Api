@@ -1,4 +1,4 @@
-import { TwitchClient } from '../src';
+import { TwitchCredentials } from '../src';
 
 const { NODE_ENV, TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET } = process.env;
 
@@ -21,7 +21,7 @@ beforeAll(() => {
     );
   }
 
-  const twitchCredentials: TwitchClient = {
+  const twitchCredentials: TwitchCredentials = {
     id: TWITCH_CLIENT_ID,
     secret: TWITCH_CLIENT_SECRET,
   };
