@@ -20,6 +20,6 @@
     "nodemon": "2.0.6"
   },
   "dependencies": {
-    "node-fetch": "^2.6.1"
+    "node-fetch": "2.6.1"
   }
 }
