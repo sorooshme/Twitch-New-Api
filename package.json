@@ -1,6 +1,6 @@
 {
   "name": "twitch-new-api",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Twitchfa Helix Api Wrapper in TypeScript",
   "main": "dist/index.js",
   "scripts": {
@@ -28,6 +28,10 @@
   "files": [
     "/dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
   "dependencies": {
     "node-fetch": "2.6.1"
   }
