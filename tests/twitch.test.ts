@@ -1,5 +1,13 @@
 import { TwitchApi } from '../src';
 
+declare global {
+  namespace NodeJS {
+    interface Global {
+      twitchCredentials: any;
+    }
+  }
+}
+
 describe('Twitch', () => {
   let twitch: TwitchApi;
 
