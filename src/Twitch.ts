@@ -86,6 +86,12 @@ export class TwitchApi {
           await new Promise((resolve) => setTimeout(resolve, delay));
         }
 
+        if (retryCount <= currentRetryCount + 1) {
+          throw new Error(
+            `Failed to get token after trying for ${currentRetryCount} times.`
+          );
+        }
+
         return getTokenFromTwitch(retryCount, currentRetryCount + 1);
       }
 

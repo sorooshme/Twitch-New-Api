@@ -21,7 +21,7 @@ const twitchCredentials: TwitchCredentials = {
 const twitch = new TwitchApi(twitchCredentials);
 
 (async () => {
-  const user = await twitch.getUserById(['mechiller']);
+  const user = await twitch.getUserByName(['mechiller']);
   const profilePicture = user[0].profile_image_url;
 })();
 ```
