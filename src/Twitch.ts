@@ -13,9 +13,9 @@ import { stringify } from 'querystring';
 
 export class TwitchApi {
   public client: TwitchCredentials;
-  private token?: string;
-  private expiresAt?: Date;
-  private endpoints = {
+  protected token?: string;
+  protected expiresAt?: Date;
+  protected endpoints = {
     auth: 'https://id.twitch.tv/oauth2/token',
     streams: 'https://api.twitch.tv/helix/streams',
     users: 'https://api.twitch.tv/helix/users',
@@ -33,7 +33,7 @@ export class TwitchApi {
   /**
    * Returns BasicHeaders for fetching.
    */
-  private getBasicHeaders(): BasicHeaders {
+  protected getBasicHeaders(): BasicHeaders {
     return { 'Content-Type': 'application/json' };
   }
 
@@ -42,7 +42,7 @@ export class TwitchApi {
    *
    * @param token Token to request with.
    */
-  private getAuthorizationHeaders(token: string): TwitchAuthorizationHeaders {
+  protected getAuthorizationHeaders(token: string): TwitchAuthorizationHeaders {
     return {
       'Client-ID': this.client.id,
       Authorization: token,
@@ -128,7 +128,7 @@ export class TwitchApi {
    * @param entries entries to get stream for.
    * @param isById search by Id?
    */
-  private async getStream(
+  protected async getStream(
     entries: string[],
     isById: boolean
   ): Promise<TwitchStreamResponsePayload[]> {
@@ -200,7 +200,7 @@ export class TwitchApi {
    * @param entries entries to get user for.
    * @param isById search by Id?
    */
-  private async getUser(
+  protected async getUser(
     entries: string[],
     isById: boolean
   ): Promise<TwitchUserResponsePayload[]> {
